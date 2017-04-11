@@ -1,0 +1,40 @@
+%%user_form%form(action="/users/" method="POST")
+
+  %%form_field%input
+  %%form_field%.warning
+  %%form_field%textarea.warning
+  %%button(submit){ disabled: false }%button Submit
+
+  %%form_field(country_selector,selector)%select
+
+    // parts
+    %%:input_field
+    %%:arrow
+    %%:dropdown_container%tag_name
+
+    // properties
+    %%(property1)
+    %%(property2)%tag_name
+
+
+  // components syntax:
+  //   %%component_name(role1,role2)(property1,property2)%tag_name.class_name#id(html_attr1="value1"){ html_attr2: "value2"}
+  //
+  // or use all attributes/properties listed in the component.dart file:
+  //   %%component_name(role1,role2)(*)%tag_name.class_name#id(html_attr1="value1"){ html_attr2: "value2"}
+  //
+  // or only set the ones we want:
+  //   %%component_name(role1,role2){ property1: "value1" }
+  //
+  // we can also combine properties which values we want to set with those we don't care about:
+  //   %%component_name()(property1){ property2: "value2" }
+  // or
+  //   %%component_name()(*){ property2: "value2" }
+  //
+  // parts syntax:
+  //   %%:part_name
+  //   %%:part_name%tag_name
+  //
+  // properties syntax:
+  //   %%(property1)
+  //   %%(property2)%tag_name
