@@ -1,6 +1,6 @@
 source "http://rubygems.org"
 
-gem "haml"
+gem "haml", git: "https://github.com/haml/haml"
 
 group :development do
   gem "bundler"

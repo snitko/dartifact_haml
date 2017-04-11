@@ -12,6 +12,7 @@ Gem::Specification.new do |s|
     "spec/spec_helper.rb",
     "example.haml",
     "README",
+    ".rspec",
     "Gemfile.lock",
     "Gemfile"
   ]
