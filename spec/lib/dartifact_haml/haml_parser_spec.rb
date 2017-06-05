@@ -2,12 +2,12 @@ require "spec_helper"
 
 describe DartifactHaml::Parser do
 
-  before(:each) do
-    @parser = DartifactHaml::Parser.new(Haml::Options.new)
+  def render(text)
+    Haml::Engine.new(text, parser_class: DartifactHaml::Parser).to_html.rstrip
   end
 
-  it "parses the line" do
-    expect(@parser.call("hello world").children[0].value[:text]).to eq("hello world!")
+  it "separates component part from the tag part" do
+    expect(render("%%component_name%div hello")).to eq("<div>hello</div>")
   end
 
 end
