@@ -18,7 +18,7 @@
 
 
 // components syntax:
-//   %%component_name(role1,role2)(property1,property2)%tag_name.class_name#id(html_attr1="value1"){ html_attr2: "value2"}
+//   %%component_name (role1,role2) (property1) %tag_name.class_name#id(html_attr1="value1"){ html_attr2: "value2"}
 //
 // or use all attributes/properties listed in the component.dart file:
 //   %%component_name(role1,role2)(*)%tag_name.class_name#id(html_attr1="value1"){ html_attr2: "value2"}
@@ -27,9 +27,9 @@
 //   %%component_name(role1,role2){ property1: "value1" }
 //
 // we can also combine properties which values we want to set with those we don't care about:
-//   %%component_name()(property1){ property2: "value2" }
+//   %%component_name()(property1){ attr_property2: "value2" }
 // or
-//   %%component_name()(*){ property2: "value2" }
+//   %%component_name{ property2: "value2" }
 //
 // parts syntax:
 //   %%:part_name
