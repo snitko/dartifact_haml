@@ -19,14 +19,20 @@ module DartifactHaml
     # Input.:  component_part_string = "form_field(country_selector,selector)"
     # Result: { name: "FormField", roles: "country_selector,selector" }
     def component_part_parsed(string)
-      matches = string.chop.match(/%%([a-zA-Z0-9_]+)?\s*(.+)?\s*(.+)?\s*(\{.+\})?/)
-      parsed = {
-        name:      matches[1].split('_').collect(&:capitalize).join + "Component",
-        roles:     (matches[2].gsub(/[\(\)]/, "") if matches[2]),
-        property:  (matches[3].gsub(/[\(\)]/, "") if matches[3]),
-        attribute_properties: (matches[4].gsub(/[\{\}]/, "") if matches[4])
-      }
-      parsed.delete_if { |k,v| v.nil? }
+      matches = string.chomp("%").match(/%%([:a-zA-Z0-9_]+)?\s*(\(.*?\))?\s*(\(.*?\))?\s*(\{.*\})?/)
+
+      parsed = {}
+
+      if matches[1].start_with?(":")
+        parsed[:part] = matches[1].sub(/\A:/, "")
+      elsif !matches[1].nil?
+        parsed[:name] = matches[1].split('_').collect(&:capitalize).join + "Component"
+      end
+
+      parsed[:roles]                = matches[2].gsub(/[\(\)]/, "") if matches[2]
+      parsed[:property]             = matches[3].gsub(/[\(\)]/, "") if matches[3]
+      parsed[:attribute_properties] = matches[4].gsub(/[\{\}]/, "") if matches[4]
+
       parsed
     end
 
@@ -43,8 +49,9 @@ module DartifactHaml
 
       # Parsing haml so we can later reconstruct it and insert our own
       # attributes.
-      matches     = haml_text.match(/%([a-zA-Z0-9_]+)?\s*(\(.+\))?\s*(\{.+\})?(.*)/)
+      matches     = haml_text.match(/%([a-zA-Z0-9_#.\-]+)?\s*(\(.+\))?\s*(\{.+\})?(.*)/)
       tag         = matches[1] || "div"
+      tag         = "div#{tag}" if tag.match(/\A[.#]/)
       attrs_plain = matches[2] ? matches[2].gsub(/[\(\)]/, "") : ""
       attrs_curly = matches[3] ? matches[3].gsub(/[\{\}]/, "") : ""
       remainder   = matches[4]
@@ -73,8 +80,8 @@ module DartifactHaml
           attrs_plain += " data-component-#{attr_name.to_s.gsub("_", "-")}=\"#{value}\""
         end
       end
-
-      "%#{tag}(#{attrs_plain}){#{attrs_curly}}#{remainder}"
+      
+      "%#{tag}(#{attrs_plain.lstrip}){#{attrs_curly}} #{remainder}".rstrip
     end
 
     # Attribute properties are passed as in a format that mirrors Ruby Hash. Example:
@@ -84,7 +91,7 @@ module DartifactHaml
       hash = {}
       s.split(",").map { |i| i.lstrip!; i.rstrip }.each do |i|
         k,v= i.split(/\s*:\s*/)
-        hash[k] = v.gsub(/"(.*)"/, '\1')
+        hash[k] = v.gsub(/["'](.*)["']/, '\1')
       end
       hash
     end
