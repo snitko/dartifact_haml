@@ -26,7 +26,11 @@ module WebfaceHaml
       if matches[1].start_with?(":")
         parsed[:part] = matches[1].sub(/\A:/, "")
       elsif !matches[1].nil?
-        parsed[:name] = matches[1].split('_').collect(&:capitalize).join + "Component"
+        if(matches[1].to_s.include?("_") || matches[1][0] != matches[1][0].upcase)
+          parsed[:name] = matches[1].split('_').collect(&:capitalize).join + "Component"
+        else
+          parsed[:name] = matches[1] + "Component"
+        end
       end
 
       parsed[:roles]                = matches[2].gsub(/[\(\)]/, "") if matches[2]

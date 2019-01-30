@@ -1,6 +1,9 @@
 // General components syntax:
 %%component_name (role1,role2) (property1,property2) { attr_property_with_value: "value", attr_property_with_diff_name(name), attr_prop3(prop3): "value"} %tag_name
 //
+// For components, both formats of specifying names (snake_case an CamelCase) are acceptable:
+%%component_name
+%%ComponentName
 // or only set the ones we want:
 %%component_name(role1,role2){ property1: "value1" }
 // or

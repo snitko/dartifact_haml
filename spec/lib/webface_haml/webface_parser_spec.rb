@@ -35,7 +35,7 @@ describe WebfaceHaml::Parser do
   end
 
   it "adds component name as data attribute to the tag" do
-    expect(render("%%button%div hello")).to eq("<div data-component-name='ButtonComponent'>hello</div>")
+    expect(render("%%DialogWindow%div hello")).to eq("<div data-component-name='DialogWindowComponent'>hello</div>")
   end
 
   it "adds part name as data attribute to the tag" do
