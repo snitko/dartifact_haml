@@ -1,4 +1,4 @@
-module DartifactHaml
+module WebfaceHaml
   class Parser < ::Haml::Parser
 
     def process_line(haml_line)

@@ -1,15 +1,15 @@
 require "spec_helper"
 
-describe DartifactHaml::Parser do
+describe WebfaceHaml::Parser do
 
   def render(text)
-    Haml::Engine.new(text, parser_class: DartifactHaml::Parser).to_html.rstrip
+    Haml::Engine.new(text, parser_class: WebfaceHaml::Parser).to_html.rstrip
   end
 
   context "parser methods" do
 
     before(:each) do
-      @parser = DartifactHaml::Parser.new([])
+      @parser = WebfaceHaml::Parser.new([])
     end
 
     it "parses the component part of the haml line" do
