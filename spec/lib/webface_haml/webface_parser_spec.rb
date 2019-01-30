@@ -54,6 +54,14 @@ describe WebfaceHaml::Parser do
     expect(render("%%button{ value: 'click' }%div")).to eq("<div data-component-attribute-properties='value:data-value' data-component-name='ButtonComponent' data-value='click'></div>")
   end
 
+  it "adds attribute properties that have a different name as html attributes" do
+    expect(render("%%button{ value(data-val): 'click' }%div")).to eq("<div data-component-attribute-properties='value:data-val' data-component-name='ButtonComponent' data-val='click'></div>")
+  end
+
+  it "adds attribute into attribute properties names, but not values" do
+    expect(render("%%button{ value(data-val) }%div")).to eq("<div data-component-attribute-properties='value:data-val' data-component-name='ButtonComponent'></div>")
+  end
+
   it "allows to skip tag name" do
     expect(render("%%button%.button hello")).to eq("<div class='button' data-component-name='ButtonComponent'>hello</div>")
   end

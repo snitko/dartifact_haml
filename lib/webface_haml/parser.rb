@@ -57,7 +57,7 @@ module WebfaceHaml
       remainder   = matches[4]
 
       component_part_parsed.each do |attr_name,value|
-        
+
         # Turns attribute_properties passed into appropriate data- attributes.
         # Example:
         #   Passed:                 { attr_1: "value1", attr_2: "value2" }
@@ -68,19 +68,26 @@ module WebfaceHaml
         if attr_name == :attribute_properties
           attribute_properties = []
           parse_attribute_properties_hash(value).each do |k,v|
-            attrs_plain += " data-#{k}=\"#{v}\"" if v
-            attribute_properties << "#{k}:data-#{k.gsub("_", "-")}"
+            if(k =~ /\A.+\(.*\)\Z/)
+              _attrs = k.split('(')
+              webface_attr_name = _attrs[0]
+              html_attr_name    = _attrs[1].chomp(")")
+            else
+              webface_attr_name = k
+              html_attr_name    = "data-#{k}"
+            end
+            attrs_plain += " #{html_attr_name}=\"#{v}\"" if v
+            attribute_properties << "#{webface_attr_name}:#{html_attr_name.gsub("_", "-")}"
           end
           attrs_plain += " data-component-#{attr_name.to_s.gsub("_", "-")}=\"#{attribute_properties.join(",")}\""
 
         # Take care of the rest of component data- attributes, such as
         # data-component-name, data-component-roles and data-component-property
         else
-
           attrs_plain += " data-component-#{attr_name.to_s.gsub("_", "-")}=\"#{value}\""
         end
       end
-      
+
       "%#{tag}(#{attrs_plain.lstrip}){#{attrs_curly}} #{remainder}".rstrip
     end
 
@@ -91,7 +98,7 @@ module WebfaceHaml
       hash = {}
       s.split(",").map { |i| i.lstrip!; i.rstrip }.each do |i|
         k,v= i.split(/\s*:\s*/)
-        hash[k] = v.gsub(/["'](.*)["']/, '\1')
+        hash[k] = v ? v.gsub(/["'](.*)["']/, '\1') : nil
       end
       hash
     end
