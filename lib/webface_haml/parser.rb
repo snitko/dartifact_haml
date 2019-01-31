@@ -2,10 +2,10 @@ module WebfaceHaml
   class Parser < ::Haml::Parser
 
     def process_line(haml_line)
-      component_part_string = haml_line.text.match(/\A%%.*?%/)[0]
-      haml_line.text        = haml_line.text.sub(/\A%%.*?%/, "%")
-
+      component_part_string = haml_line.text.match(/\A%%.*?%/)
       if component_part_string
+        component_part_string = component_part_string[0]
+        haml_line.text = haml_line.text.sub(/\A%%.*?%/, "%")
         haml_line.text = add_component_data_to_tag(component_part_parsed(component_part_string), haml_line.text)
       end
 
@@ -102,7 +102,8 @@ module WebfaceHaml
       hash = {}
       s.split(",").map { |i| i.lstrip!; i.rstrip }.each do |i|
         k,v= i.split(/\s*:\s*/)
-        hash[k] = v ? v.gsub(/["'](.*)["']/, '\1') : nil
+        # TODO this evaluates out of the views context, need to figure out a way to provide the right scope for eval
+        hash[k] = v ? eval(v) : nil
       end
       hash
     end

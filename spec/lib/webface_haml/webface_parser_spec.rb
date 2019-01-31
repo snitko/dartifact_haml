@@ -3,7 +3,7 @@ require "spec_helper"
 describe WebfaceHaml::Parser do
 
   def render(text)
-    Haml::Engine.new(text, parser_class: WebfaceHaml::Parser).to_html.rstrip
+    Haml::Engine.new(text, parser_class: WebfaceHaml::Parser).render.rstrip
   end
 
   context "parser methods" do
