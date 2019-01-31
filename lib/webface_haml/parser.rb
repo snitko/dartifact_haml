@@ -17,7 +17,7 @@ module WebfaceHaml
     # to insert this content into the tag.
     #
     # Input.:  component_part_string = "form_field(country_selector,selector)"
-    # Result: { name: "FormField", roles: "country_selector,selector" }
+    # Result: { class: "FormField", roles: "country_selector,selector" }
     def component_part_parsed(string)
       matches = string.chomp("%").match(/%%([:a-zA-Z0-9_]+)?\s*(\(.*?\))?\s*(\(.*?\))?\s*(\{.*\})?/)
 
@@ -27,9 +27,9 @@ module WebfaceHaml
         parsed[:part] = matches[1].sub(/\A:/, "")
       elsif !matches[1].nil?
         if(matches[1].to_s.include?("_") || matches[1][0] != matches[1][0].upcase)
-          parsed[:name] = matches[1].split('_').collect(&:capitalize).join + "Component"
+          parsed[:class] = matches[1].split('_').collect(&:capitalize).join + "Component"
         else
-          parsed[:name] = matches[1] + "Component"
+          parsed[:class] = matches[1] + "Component"
         end
       end
 
@@ -47,7 +47,7 @@ module WebfaceHaml
     #        haml_line             = "%input(name="country")
     #
     # Result: "%input(name="country"
-    #                 data-component-name="FormFieldComponent"
+    #                 data-component-class="FormFieldComponent"
     #                 data-component-roles="country_selector,selector")
     def add_component_data_to_tag(component_part_parsed, haml_text)
 
@@ -86,7 +86,7 @@ module WebfaceHaml
           attrs_plain += " data-component-#{attr_name.to_s.gsub("_", "-")}=\"#{attribute_properties.join(",")}\""
 
         # Take care of the rest of component data- attributes, such as
-        # data-component-name, data-component-roles and data-component-property
+        # data-component-class, data-component-roles and data-component-property
         else
           attrs_plain += " data-component-#{attr_name.to_s.gsub("_", "-")}=\"#{value}\""
         end
