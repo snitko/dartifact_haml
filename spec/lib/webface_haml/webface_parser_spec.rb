@@ -51,7 +51,7 @@ describe WebfaceHaml::Parser do
   end
 
   it "adds attribute properties data attribute to the component tag" do
-    expect(render("%%button{ value: 'click' }%div")).to eq("<div data-component-attribute-properties='value:data-value' data-component-class='ButtonComponent' data-value='click'></div>")
+    expect(render("%%button{ my_value: 'click' }%div")).to eq("<div data-component-attribute-properties='my_value:data-my-value' data-component-class='ButtonComponent' data-my-value='click'></div>")
   end
 
   it "adds attribute properties that have a different name as html attributes" do

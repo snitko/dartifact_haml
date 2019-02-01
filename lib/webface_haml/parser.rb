@@ -80,8 +80,9 @@ module WebfaceHaml
               webface_attr_name = k
               html_attr_name    = "data-#{k}"
             end
+            html_attr_name.gsub!("_", "-")
             attrs_plain += " #{html_attr_name}=\"#{v}\"" if v
-            attribute_properties << "#{webface_attr_name}:#{html_attr_name.gsub("_", "-")}"
+            attribute_properties << "#{webface_attr_name}:#{html_attr_name}"
           end
           attrs_plain += " data-component-#{attr_name.to_s.gsub("_", "-")}=\"#{attribute_properties.join(",")}\""
 
